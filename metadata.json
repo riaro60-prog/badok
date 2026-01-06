@@ -1,0 +1,5 @@
+{
+  "name": "Zen Omok (Gomoku) AI",
+  "description": "A sophisticated Omok game featuring a clean Zen-inspired UI and an intelligent AI opponent powered by Gemini 3. Challenge yourself against a high-level strategic model in this classic board game.",
+  "requestFramePermissions": []
+}
