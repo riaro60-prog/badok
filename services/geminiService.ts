@@ -4,7 +4,14 @@ import { BoardState, Move } from "../types";
 import { BOARD_SIZE } from "../constants";
 
 export const getAIMove = async (board: BoardState): Promise<Move> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  // API 키를 안전하게 가져옵니다. (Vercel 등의 환경에서 process.env가 없을 경우 대비)
+  const apiKey = typeof process !== 'undefined' ? process.env.API_KEY : '';
+  
+  if (!apiKey) {
+    throw new Error("API Key is missing. Please check your environment variables.");
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
   
   // Convert board to a more readable format for the AI
   const boardText = board.map(row => 
@@ -49,10 +56,10 @@ export const getAIMove = async (board: BoardState): Promise<Move> => {
   });
 
   try {
-    const result = JSON.parse(response.text);
+    const result = JSON.parse(response.text || '{}');
     // Basic validation to ensure coordinates are on board
-    const row = Math.max(0, Math.min(BOARD_SIZE - 1, result.row));
-    const col = Math.max(0, Math.min(BOARD_SIZE - 1, result.col));
+    const row = Math.max(0, Math.min(BOARD_SIZE - 1, result.row ?? 0));
+    const col = Math.max(0, Math.min(BOARD_SIZE - 1, result.col ?? 0));
     
     // Fallback if AI picks an occupied spot (simple scan)
     if (board[row][col] !== null) {
