@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Player, BoardState, Move, GameStatus } from './types';
-import { createInitialBoard, checkWinner, isBoardFull } from './utils/gameLogic';
-import { getAIMove } from './services/geminiService';
-import Board from './components/Board';
+import { Player, BoardState, Move, GameStatus } from './types.ts';
+import { createInitialBoard, checkWinner, isBoardFull } from './utils/gameLogic.ts';
+import { getAIMove } from './services/geminiService.ts';
+import Board from './components/Board.tsx';
 import { RefreshCw, BrainCircuit, Trophy, User, Hash, Users, Cpu } from 'lucide-react';
 
 type GameMode = 'AI' | 'PVP';
@@ -32,7 +32,6 @@ const App: React.FC = () => {
   };
 
   const handleCellClick = useCallback(async (row: number, col: number) => {
-    // AI 모드일 때 백의 턴이거나 AI가 생각 중이면 클릭 방지
     if (board[row][col] || status.winner || status.isDraw || status.isThinking) return;
     if (gameMode === 'AI' && currentPlayer === Player.WHITE) return;
 
@@ -54,22 +53,17 @@ const App: React.FC = () => {
       return;
     }
 
-    // 턴 교체
     setCurrentPlayer(currentPlayer === Player.BLACK ? Player.WHITE : Player.BLACK);
   }, [board, currentPlayer, status, gameMode]);
 
-  // AI Turn Effect
   useEffect(() => {
     const triggerAI = async () => {
-      // AI 모드이고 백의 턴일 때만 실행
       if (gameMode === 'AI' && currentPlayer === Player.WHITE && !status.winner && !status.isDraw) {
         setStatus(prev => ({ ...prev, isThinking: true }));
-        
         await new Promise(resolve => setTimeout(resolve, 800));
 
         try {
           const aiMove = await getAIMove(board);
-          
           const newBoard = board.map((r, ri) => 
             r.map((c, ci) => (ri === aiMove.row && ci === aiMove.col ? Player.WHITE : c))
           );
@@ -91,7 +85,6 @@ const App: React.FC = () => {
         }
       }
     };
-
     triggerAI();
   }, [currentPlayer, board, status.winner, status.isDraw, gameMode]);
 
@@ -108,9 +101,7 @@ const App: React.FC = () => {
       </header>
 
       <main className="flex flex-col lg:flex-row gap-12 items-center">
-        {/* Left Side: Game Info & Modes */}
         <div className="w-full max-w-xs space-y-4">
-          {/* Mode Selector */}
           <div className="bg-white p-2 rounded-2xl shadow-sm border border-slate-200 flex gap-2">
             <button 
               onClick={() => resetGame('AI')}
@@ -188,7 +179,6 @@ const App: React.FC = () => {
           </button>
         </div>
 
-        {/* Center: Board */}
         <div className="relative group">
           <Board 
             board={board} 
@@ -206,7 +196,6 @@ const App: React.FC = () => {
           )}
         </div>
 
-        {/* Right Side: Strategy / Instructions */}
         <div className="hidden lg:block w-full max-w-xs p-6 bg-white rounded-2xl shadow-sm border border-slate-200 self-stretch">
           <h2 className="text-lg font-semibold mb-4 border-b pb-2">도움말</h2>
           <ul className="space-y-4 text-sm text-slate-600">
