@@ -15,37 +15,43 @@ const Board: React.FC<BoardProps> = ({ board, onCellClick, lastMove, isThinking 
   const getLinePos = (index: number) => `${((index + 0.5) / BOARD_SIZE) * 100}%`;
 
   return (
-    <div className="relative p-4 bg-[#E3C193] rounded shadow-2xl border-[12px] border-[#8B4513] transition-all">
-      <div className="absolute inset-0 pointer-events-none p-4">
+    <div className="relative p-6 bg-[#FFF9ED] rounded-[2.5rem] shadow-2xl border-[14px] border-[#FBD38D] transition-all overflow-hidden">
+      {/* Wood Texture / Pattern Overlay */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:20px_20px]" />
+
+      <div className="absolute inset-0 pointer-events-none p-6">
         <div className="w-full h-full relative">
+          {/* Grid Lines */}
           {Array.from({ length: BOARD_SIZE }).map((_, i) => (
             <div 
               key={`v-${i}`}
-              className="absolute bg-black opacity-40"
+              className="absolute bg-orange-200"
               style={{
                 left: getLinePos(i),
                 top: getLinePos(0),
                 bottom: getLinePos(BOARD_SIZE - 1),
-                width: '1px'
+                width: '2px'
               }}
             />
           ))}
           {Array.from({ length: BOARD_SIZE }).map((_, i) => (
             <div 
               key={`h-${i}`}
-              className="absolute bg-black opacity-40"
+              className="absolute bg-orange-200"
               style={{
                 top: getLinePos(i),
                 left: getLinePos(0),
                 right: getLinePos(BOARD_SIZE - 1),
-                height: '1px'
+                height: '2px'
               }}
             />
           ))}
+          
+          {/* Hoshi Points */}
           {[3, 11, 7].flatMap(r => [3, 11, 7].map(c => (r === 7 && c !== 7) || (c === 7 && r !== 7) ? null : [r, c])).filter(p => p).map(([r, c], idx) => (
              <div 
               key={`hoshi-${idx}`}
-              className="absolute bg-black/70 w-2.5 h-2.5 rounded-full -translate-x-1/2 -translate-y-1/2"
+              className="absolute bg-orange-300 w-3 h-3 rounded-full -translate-x-1/2 -translate-y-1/2 shadow-sm"
               style={{
                 top: getLinePos(r!),
                 left: getLinePos(c!)
@@ -59,8 +65,8 @@ const Board: React.FC<BoardProps> = ({ board, onCellClick, lastMove, isThinking 
         className="grid gap-0 relative z-10" 
         style={{ 
           gridTemplateColumns: `repeat(${BOARD_SIZE}, minmax(0, 1fr))`,
-          width: 'min(90vw, 520px)',
-          height: 'min(90vw, 520px)'
+          width: 'min(88vw, 540px)',
+          height: 'min(88vw, 540px)'
         }}
       >
         {board.map((row, rIdx) => 
@@ -69,7 +75,7 @@ const Board: React.FC<BoardProps> = ({ board, onCellClick, lastMove, isThinking 
               key={`${rIdx}-${cIdx}`}
               disabled={cell !== null || isThinking}
               onClick={() => onCellClick(rIdx, cIdx)}
-              className="relative flex items-center justify-center hover:bg-black/5 rounded-none transition-colors group focus:outline-none"
+              className="relative flex items-center justify-center hover:bg-pink-100/30 rounded-full transition-all duration-300 group focus:outline-none"
               aria-label={`row ${rIdx} column ${cIdx}`}
             >
               <Stone 
@@ -77,7 +83,7 @@ const Board: React.FC<BoardProps> = ({ board, onCellClick, lastMove, isThinking 
                 isLastMove={lastMove?.row === rIdx && lastMove?.col === cIdx} 
               />
               {cell === null && !isThinking && (
-                <div className="hidden group-hover:block w-3 h-3 bg-black/20 rounded-full" />
+                <div className="hidden group-hover:block w-4 h-4 bg-pink-200/50 rounded-full animate-ping" />
               )}
             </button>
           ))

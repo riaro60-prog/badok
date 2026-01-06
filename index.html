@@ -4,26 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zen Omok AI</title>
+    <title>Sweet Omok 🍬</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Noto+Sans+KR', sans-serif;
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #fff5f5 0%, #f0f4ff 100%);
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
+        }
+        .font-cute {
+            font-family: 'Gaegu', cursive;
         }
         #error-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            color: white;
+            background: rgba(255,182,193,0.9);
+            color: #d63384;
             padding: 20px;
             z-index: 9999;
             font-family: monospace;
             white-space: pre-wrap;
+        }
+        @keyframes bounce-subtle {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
+        .animate-soft-bounce {
+          animation: bounce-subtle 2s infinite ease-in-out;
         }
     </style>
     <script type="importmap">
@@ -43,19 +54,16 @@
 <body>
     <div id="root"></div>
     <div id="error-overlay"></div>
-    
     <script>
-        // 배포 환경에서 에러 발생 시 화면에 표시하여 디버깅을 도움
         window.onerror = function(msg, url, line, col, error) {
             const overlay = document.getElementById('error-overlay');
             if (overlay) {
                 overlay.style.display = 'block';
-                overlay.textContent = `Error: ${msg}\nAt: ${url}:${line}:${col}\n\nStack: ${error?.stack}`;
+                overlay.textContent = `Oops! 솜사탕 기계에 문제가 생겼어요: ${msg}\nAt: ${url}:${line}:${col}`;
             }
             return false;
         };
     </script>
-    
     <script type="module" src="./index.tsx"></script>
 </body>
 </html>
